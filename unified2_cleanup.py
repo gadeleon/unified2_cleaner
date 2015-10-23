@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 
 # Create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 
 # create formatter
 formatter = logging.Formatter("%(asctime)s:%(name)s:%(levelname)s: %(message)s")
@@ -104,4 +104,7 @@ for i in dir_check:
         age_check = _is_unified2_too_old(x)
         if age_check:
             can_delete.append(x)
-print can_delete
+print '''
+Number of eligible files: {0}
+Amount of Reclaimable Size: {1}
+'''.format(len(can_delete), len(can_delete)*128)
