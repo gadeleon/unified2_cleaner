@@ -86,6 +86,34 @@ def _is_unified2_too_old(unified2_file, interval=30):
         logger.debug('{0} is NOT older than {1}, should NOT be deleted'.format(unified2_file, str(interval)))
         return False
 
+def _eligible_files(interval=30):
+    '''
+    Returns a list of eligible absolute path of files based on interval
+    '''
+    can_delete = []
+    dir_check = _get_snort_interface_directories()
+    for i in dir_check:
+        uni_check = _get_unified2_file_list(i)
+        for x in uni_check:
+            age_check = _is_unified2_too_old(x, interval)
+            if age_check:
+                can_delete.append('{0}/{1}'.format(i,x))
+                logger.debug('Added absolute path: {0}/{1}'.format(i,x))
+    return can_delete
+
+
+
+
+def _eval_cleanup(interval=30):
+    '''
+    Prints number of files that can be deleted and how much space can be saved based on interval
+    '''
+    cleanup = _eligible_files(interval)
+    print '''
+    Number of eligible files: {0}
+    Amount of Reclaimable Size: {1}GB
+    '''.format(len(cleanup), (len(cleanup))*128)/1024)
+
 
 
 # Debug Section~!
@@ -95,16 +123,4 @@ def _is_unified2_too_old(unified2_file, interval=30):
 #date_check = _days_ago_in_epoch()
 #age_check = _is_unified2_too_old(uni_check[0])
 
-can_delete = []
-
-dir_check = _get_snort_interface_directories()
-for i in dir_check:
-    uni_check = _get_unified2_file_list(i)
-    for x in uni_check:
-        age_check = _is_unified2_too_old(x)
-        if age_check:
-            can_delete.append(x)
-print '''
-Number of eligible files: {0}
-Amount of Reclaimable Size: {1}
-'''.format(len(can_delete), len(can_delete)*128)
+count = _eval_cleanup()
