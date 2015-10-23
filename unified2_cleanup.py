@@ -59,7 +59,7 @@ def _get_epoch(unified2_file):
     logger.debug('Splitting file {0}'.format(unified2_file))
     epoch = unified2_file.split('.')[1]
     logger.debug('Extracted epoch time "{0}" from {1}'.format(epoch, unified2_file))
-    return epoch
+    return int(epoch)
 
 def _days_ago_in_epoch(interval=30):
     '''
@@ -67,18 +67,30 @@ def _days_ago_in_epoch(interval=30):
     Default interval is 30 days ago
     '''
     logger.debug('Interval provided: {0}'.format(str(interval)))
-    rotate_day = datetime.datetime.today() - datetime.timedelta(interval)
+    rotate_day = datetime.datetime.now() - datetime.timedelta(interval)
     logger.debug('Cutoff date: {0}'.format(rotate_day.strftime('%Y-%m-%d %H:%M:%S')))
     epoch_rotate = rotate_day.strftime('%s')
     logger.debug('Cutoff date in Epoch: {0}'.format(epoch_rotate))
-    return epoch_rotate
+    return int(epoch_rotate)
 
+def _is_unified2_too_old(unified2_file, interval=30):
+    '''
+    Returns True if Epoch time of unified2_file is less than now - 30 days
+    '''
+    uni_epoch = _get_epoch(unified2_file)
+    cutoff = _days_ago_in_epoch(interval)
+    if uni_epoch < cutoff:
+        logger.debug('{0} is older than {1} days, can be deleted'.format(unified2_file, str(interval)))
+        return True
+    else:
+        logger.debug('{0} is NOT older than {1}, should NOT be deleted'.format(unified2_file, str(interval)))
+        return False
 
 
 
 # Debug Section~!
-#check =_get_snort_interface_directories()
-#uni_check = _get_unified2_file_list(check[0])
+check =_get_snort_interface_directories()
+uni_check = _get_unified2_file_list(check[0])
 #epoch_check = _get_epoch(uni_check[0])
-date_check = _days_ago_in_epoch()
-
+#date_check = _days_ago_in_epoch()
+age_check = _is_unified2_too_old(uni_check[0])
