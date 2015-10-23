@@ -61,11 +61,24 @@ def _get_epoch(unified2_file):
     logger.debug('Extracted epoch time "{0}" from {1}'.format(epoch, unified2_file))
     return epoch
 
+def _days_ago_in_epoch(interval=30):
+    '''
+    Get today's date, go back interval days, and convert to epoch time.
+    Default interval is 30 days ago
+    '''
+    logger.debug('Interval provided: {0}'.format(str(interval)))
+    rotate_day = datetime.datetime.today() - datetime.timedelta(interval)
+    logger.debug('Cutoff date: {0}'.format(strftime(rotate_day)))
+    epoch_rotate = rotate_day.total_seconds()
+    logger.debug('Cutoff date in Epoch: {0}'.format(epoch_rotate))
+    return epoch_rotate
+
+
 
 
 # Debug Section~!
 check =_get_snort_interface_directories()
 uni_check = _get_unified2_file_list(check[0])
 epoch_check = _get_epoch(uni_check[0])
-print epoch_check
+date_check = _days_ago_in_epoch()
 
