@@ -116,7 +116,7 @@ def _eligible_files(interval):
     return can_delete
 
 
-def _eval_cleanup(interval):
+def _eval_cleanup(interval, unisize=128):
     '''
     Prints number of files that can be deleted and how much space can be saved based on interval
     '''
@@ -127,10 +127,10 @@ def _eval_cleanup(interval):
     print '''
     Number of eligible files: {0}
     Amount of Reclaimable Size: {1}GB
-    '''.format(len(cleanup), (len(cleanup)*128/1024))
+    '''.format(len(cleanup), (len(cleanup)*unisize/1024))
 
 
-def _cleanup(interval):
+def _cleanup(interval, unisize=128):
     '''
     Deletes files from _eligible_files() list based on interval.
     WARNING: There is no turning back!
@@ -146,7 +146,7 @@ def _cleanup(interval):
             os.remove(i)
             logger.debug('Removed file: {0}'.format(i))
         logger.info('Files deleted: {0}'.format(len(files)))
-        logger.info('Space Reclamed: {0}'.format(len(files)*128/1024))
+        logger.info('Space Reclamed: {0}'.format(len(files)*unisize/1024))
         sys.exit(0)
     else:
         logger.info('Not deleting files')

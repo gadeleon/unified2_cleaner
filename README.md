@@ -8,7 +8,7 @@ Compatible with Python 2.6+
 
 # Asssumes snort unified2 data is in "/var/log/snort", using the default pretext of unified2 files "snort-unified2", and unified2 files size is 128MB!
 
-You can change the location within `_get_snort_interface_directories(snort_path='/var/log/snort')` and `_get_unified2_file_list(interface_path, unified2_prefix='snort-unified2')`
+You can change the location within `_get_snort_interface_directories(snort_path='/var/log/snort')`, `_get_unified2_file_list(interface_path, unified2_prefix='snort-unified2')`, and file size assumptions in `_eval_cleanup(interval, unisize=128):` and `_cleanup(interval, unisize=128)`.
 Hoping future versions will locate and grab this info from your snort.conf file.
 
 # Examples
