@@ -10,22 +10,26 @@ Hoping future versions will locate and grab this info from your snort.conf file.
 # Examples
 
 Evaluate how many files you can delete and space you can reclaim for unified files 30+ days old
+
 `
 python do.py --eval
 `
 
 Evaluate how many files you can delete and space you reclaim for unified2 files 5+ days old
 
+
 `
 python unified2_cleanup.py -d 5 --eval
 `
 
 Delete files 30+ days old
+
 `
 python unified2_cleanup.py --purge
 `
 
 Delete files 10+ days old
+
 `
 python unified2_cleanup.py -d 10 --purge
 `
