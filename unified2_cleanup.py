@@ -14,16 +14,22 @@ logger.setLevel(logging.DEBUG)
 
 # Create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 
-# create formatter
+# Add file handler
+fh = logging.FileHandler('un2log.log')
+fh.setLevel(logging.DEBUG)
+
+# Create formatter
 formatter = logging.Formatter("%(asctime)s:%(name)s:%(levelname)s: %(message)s")
 
 # Add formatter to ch
 ch.setFormatter(formatter)
+fh.setFormatter(formatter)
 
 # Add ch to logger
 logger.addHandler(ch)
+logger.addHandler(fh)
 
 def _get_snort_interface_directories(snort_path='/var/log/snort'):
     '''
@@ -132,7 +138,7 @@ def _cleanup(interval=30):
             logger.debug('Removing file {0}'.format(i))
             os.remove(i)
             logger.debug('Removed file: {0}'.format(i))
-        logger.info('Files deleted: {0}'.format(len(files))
+        logger.info('Files deleted: {0}'.format(len(files)))
         logger.info('Space Reclamed: {0}'.format(len(files)*128/1024))
         sys.exit(0)
     else:
@@ -148,4 +154,5 @@ def _cleanup(interval=30):
 #date_check = _days_ago_in_epoch()
 #age_check = _is_unified2_too_old(uni_check[0])
 
-count = _eval_cleanup()
+
+
