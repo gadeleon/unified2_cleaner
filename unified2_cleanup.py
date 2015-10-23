@@ -3,6 +3,7 @@ Script that will remove unified2 files based on a specified interval.
 Compatible with Python 2.6+
 '''
 
+import argparse
 import datetime
 import logging
 import sys
@@ -10,7 +11,7 @@ import os
 
 # Set up Logger
 logger = logging.getLogger('unified2_cleaner')
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
 
 # Create console handler and set level to debug
 ch = logging.StreamHandler()
@@ -119,6 +120,9 @@ def _eval_cleanup(interval=30):
     '''
     Prints number of files that can be deleted and how much space can be saved based on interval
     '''
+    if type(interval) != int:
+        logger.error('Interval specified is type {0}, must be int'.format(type(interval)))
+        sys.exit(1)
     cleanup = _eligible_files(interval)
     print '''
     Number of eligible files: {0}
@@ -131,6 +135,9 @@ def _cleanup(interval=30):
     Deletes files from _eligible_files() list based on interval.
     WARNING: There is no turning back!
     '''
+    if type(interval) != int:
+        logger.error('Interval specified is type {0}, must be int'.format(type(interval)))
+        sys.exit(1)
     confirm = raw_input('WARNING: Type "Y" or "y" to continue and delete files. There is no way to undo this action!: ')
     if confirm.lower() == 'y':
         files = _eligible_files(interval)
@@ -145,14 +152,40 @@ def _cleanup(interval=30):
         logger.info('Not deleting files')
         sys.exit(0)
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--version', action='version',
+        version = '%(prog)s 1.0.0')
+    parser.add_argument('-d', '--day-interval', type=int, required=True,
+        nargs=1, default=30,
+        help='Any files older than d days ago will be evaluated/deleted')
+    parser.add_argument('--eval', action='store_true',
+        help='Count the number files you can delete and space you can\
+        recover for files d+ days old')
+    parser.add_argument('--purge', action='store_true',
+        help='Delete files d+ days old.')
+    parser.add_argument('--debug', action='store_true',
+        help='Turn on debug message')
+    args = parser.parse_args()
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
+    if not args.eval and not args.purge:
+        logger.error('Please supply --eval or --purge')
+        sys.exit(1)
+    if args.eval and args.purge:
+        logger.error('Please supply --eval or --purge, not both')
+        sys.exit(1)
+    if args.eval:
+        _eval_cleanup(args.day_interval[0]])
+    if args.purge:
+        _cleanup(args.day_interval[0])
 
 
-# Debug Section~!
-#check =_get_snort_interface_directories()
-#uni_check = _get_unified2_file_list(check[0])
-#epoch_check = _get_epoch(uni_check[0])
-#date_check = _days_ago_in_epoch()
-#age_check = _is_unified2_too_old(uni_check[0])
+if __name__ == '__main__':
+    main()
+
 
 
 
