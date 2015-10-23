@@ -18,7 +18,7 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # Add file handler
-fh = logging.FileHandler('un2log.log')
+fh = logging.FileHandler('uni2log.log')
 fh.setLevel(logging.DEBUG)
 
 # Create formatter
@@ -72,7 +72,7 @@ def _get_epoch(unified2_file):
     return int(epoch)
 
 
-def _days_ago_in_epoch(interval=30):
+def _days_ago_in_epoch(interval):
     '''
     Get today's date, go back interval days, and convert to epoch time.
     Default interval is 30 days ago
@@ -85,7 +85,7 @@ def _days_ago_in_epoch(interval=30):
     return int(epoch_rotate)
 
 
-def _is_unified2_too_old(unified2_file, interval=30):
+def _is_unified2_too_old(unified2_file, interval):
     '''
     Returns True if Epoch time of unified2_file is less than now - 30 days
     '''
@@ -99,7 +99,7 @@ def _is_unified2_too_old(unified2_file, interval=30):
         return False
 
 
-def _eligible_files(interval=30):
+def _eligible_files(interval):
     '''
     Returns a list with absolute path of files eligible for deletion based on interval
     '''
@@ -116,7 +116,7 @@ def _eligible_files(interval=30):
     return can_delete
 
 
-def _eval_cleanup(interval=30):
+def _eval_cleanup(interval):
     '''
     Prints number of files that can be deleted and how much space can be saved based on interval
     '''
@@ -130,7 +130,7 @@ def _eval_cleanup(interval=30):
     '''.format(len(cleanup), (len(cleanup)*128/1024))
 
 
-def _cleanup(interval=30):
+def _cleanup(interval):
     '''
     Deletes files from _eligible_files() list based on interval.
     WARNING: There is no turning back!
