@@ -56,7 +56,10 @@ def _get_epoch(unified2_file):
     '''
     Strips off prefix of a unified2 file and gets the epoch time
     '''
-    return unified2_file.split('.')[1]
+    logger.debug('Stripping file {0}'.format(unified2_file))
+    epoch = unified2_file.split('.')[1]
+    logger.debug('Extracted epoch time "{0}" from {1}'.format(epoch, unified2_file))
+    return epoch
 
 
 
