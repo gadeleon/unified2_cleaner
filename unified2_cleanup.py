@@ -5,6 +5,7 @@ Compatible with Python 2.6+
 
 import datetime
 import logging
+import sys
 import os
 
 # Set up Logger
@@ -39,6 +40,7 @@ def _get_snort_interface_directories(snort_path='/var/log/snort'):
             logger.debug('{0} added to list of unified2 paths'.format(potential_path))
     return output
 
+
 def _get_unified2_file_list(interface_path, unified2_prefix='snort-unified2'):
     '''
     Returns a list of files within an interface folder ex:dag0:32
@@ -52,6 +54,7 @@ def _get_unified2_file_list(interface_path, unified2_prefix='snort-unified2'):
             output.append(i)
     return output
 
+
 def _get_epoch(unified2_file):
     '''
     Strips off prefix of a unified2 file and gets the epoch time
@@ -60,6 +63,7 @@ def _get_epoch(unified2_file):
     epoch = unified2_file.split('.')[1]
     logger.debug('Extracted epoch time "{0}" from {1}'.format(epoch, unified2_file))
     return int(epoch)
+
 
 def _days_ago_in_epoch(interval=30):
     '''
@@ -72,6 +76,7 @@ def _days_ago_in_epoch(interval=30):
     epoch_rotate = rotate_day.strftime('%s')
     logger.debug('Cutoff date in Epoch: {0}'.format(epoch_rotate))
     return int(epoch_rotate)
+
 
 def _is_unified2_too_old(unified2_file, interval=30):
     '''
@@ -86,10 +91,12 @@ def _is_unified2_too_old(unified2_file, interval=30):
         logger.debug('{0} is NOT older than {1}, should NOT be deleted'.format(unified2_file, str(interval)))
         return False
 
+
 def _eligible_files(interval=30):
     '''
-    Returns a list of eligible absolute path of files based on interval
+    Returns a list with absolute path of files eligible for deletion based on interval
     '''
+    logger.debug('Determining eligible files')
     can_delete = []
     dir_check = _get_snort_interface_directories()
     for i in dir_check:
@@ -102,8 +109,6 @@ def _eligible_files(interval=30):
     return can_delete
 
 
-
-
 def _eval_cleanup(interval=30):
     '''
     Prints number of files that can be deleted and how much space can be saved based on interval
@@ -112,7 +117,27 @@ def _eval_cleanup(interval=30):
     print '''
     Number of eligible files: {0}
     Amount of Reclaimable Size: {1}GB
-    '''.format(len(cleanup), (len(cleanup))*128)/1024)
+    '''.format(len(cleanup), (len(cleanup)*128/1024))
+
+
+def _cleanup(interval=30):
+    '''
+    Deletes files from _eligible_files() list based on interval.
+    WARNING: There is no turning back!
+    '''
+    confirm = raw_input('WARNING: Type "Y" or "y" to continue and delete files. There is no way to undo this action!: ')
+    if confirm.lower() == 'y':
+        files = _eligible_files(interval)
+        for i in files:
+            logger.debug('Removing file {0}'.format(i))
+            os.remove(i)
+            logger.debug('Removed file: {0}'.format(i))
+        logger.info('Files deleted: {0}'.format(len(files))
+        logger.info('Space Reclamed: {0}'.format(len(files)*128/1024))
+        sys.exit(0)
+    else:
+        logger.info('Not deleting files')
+        sys.exit(0)
 
 
 
