@@ -89,8 +89,19 @@ def _is_unified2_too_old(unified2_file, interval=30):
 
 
 # Debug Section~!
-check =_get_snort_interface_directories()
-uni_check = _get_unified2_file_list(check[0])
+#check =_get_snort_interface_directories()
+#uni_check = _get_unified2_file_list(check[0])
 #epoch_check = _get_epoch(uni_check[0])
 #date_check = _days_ago_in_epoch()
-age_check = _is_unified2_too_old(uni_check[0])
+#age_check = _is_unified2_too_old(uni_check[0])
+
+can_delete = []
+
+dir_check = _get_snort_interface_directories()
+for i in dir_check:
+    uni_check = _get_unified2_file_list(i)
+    for x in uni_check:
+        age_check = _is_unified2_too_old(x)
+        if age_check:
+            can_delete.append(x)
+print can_delete
