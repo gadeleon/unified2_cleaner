@@ -47,14 +47,14 @@ def _get_unified2_file_list(interface_path, unified2_prefix='snort-unified2'):
     logger.debug('Checking contents of {0}'.format(interface_path))
     for i in os.listdir(interface_path):
         if i.startswith(unified2_prefix):
-            logger.debug('{0} matches unified2_prefix, appending to output')
+            logger.debug('{0} matches unified2_prefix, appending to output'.format(i))
             output.append(i)
     return output
 
 
 
 # Debug Section~!
-check =_get_snort_interface_directories
+check =_get_snort_interface_directories()
 uni_check = _get_unified2_file_list(check[0])
 print uni_check
 
