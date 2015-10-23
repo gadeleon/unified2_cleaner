@@ -156,9 +156,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--version', action='version',
         version = '%(prog)s 1.0.0')
-    parser.add_argument('-d', '--day-interval', type=int, required=True,
-        nargs=1, default=30,
-        help='Any files older than d days ago will be evaluated/deleted')
+    parser.add_argument('-d', '--day-interval', type=int,
+        nargs='?', const=30,
+        help='Any files older than d days ago will be evaluated/deleted \
+        (default: 30)')
     parser.add_argument('--eval', action='store_true',
         help='Count the number files you can delete and space you can\
         recover for files d+ days old')
@@ -171,6 +172,11 @@ def main():
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
+    if not args.day_interval:
+        interval = 30
+        logger.debug('interval: {0}'.format(interval))
+    elif args.day_interval:
+        interval = args.day_interval
     if not args.eval and not args.purge:
         logger.error('Please supply --eval or --purge')
         sys.exit(1)
@@ -178,9 +184,9 @@ def main():
         logger.error('Please supply --eval or --purge, not both')
         sys.exit(1)
     if args.eval:
-        _eval_cleanup(args.day_interval[0]])
+        _eval_cleanup(interval)
     if args.purge:
-        _cleanup(args.day_interval[0])
+        _cleanup(day_interval)
 
 
 if __name__ == '__main__':
