@@ -186,7 +186,7 @@ def main():
     if args.eval:
         _eval_cleanup(interval)
     if args.purge:
-        _cleanup(day_interval)
+        _cleanup(interval)
 
 
 if __name__ == '__main__':
