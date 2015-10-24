@@ -146,7 +146,7 @@ def _cleanup(interval, unisize=128):
             os.remove(i)
             logger.debug('Removed file: {0}'.format(i))
         logger.info('Files deleted: {0}'.format(len(files)))
-        logger.info('Space Reclamed: {0}'.format(len(files)*unisize/1024))
+        logger.info('Space Reclamed: {0}GB'.format(len(files)*unisize/1024))
         sys.exit(0)
     else:
         logger.info('Not deleting files')
