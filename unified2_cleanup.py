@@ -11,7 +11,6 @@ import os
 
 # Set up Logger
 logger = logging.getLogger('unified2_cleaner')
-#logger.setLevel(logging.DEBUG)
 
 # Create console handler and set level to debug
 ch = logging.StreamHandler()
@@ -75,7 +74,6 @@ def _get_epoch(unified2_file):
 def _days_ago_in_epoch(interval):
     '''
     Get today's date, go back interval days, and convert to epoch time.
-    Default interval is 30 days ago
     '''
     logger.debug('Interval provided: {0}'.format(str(interval)))
     rotate_day = datetime.datetime.now() - datetime.timedelta(interval)
@@ -87,7 +85,7 @@ def _days_ago_in_epoch(interval):
 
 def _is_unified2_too_old(unified2_file, interval):
     '''
-    Returns True if Epoch time of unified2_file is less than now - 30 days
+    Returns True if Epoch time of unified2_file is less than now - interval days
     '''
     uni_epoch = _get_epoch(unified2_file)
     cutoff = _days_ago_in_epoch(interval)
