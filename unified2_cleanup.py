@@ -123,7 +123,7 @@ def _eval_cleanup(interval, unisize=128):
         sys.exit(1)
     cleanup = _eligible_files(interval)
     print '''
-    Number of eligible files: {0}
+    Number of Eligible Files: {0}
     Amount of Reclaimable Size: {1}GB
     '''.format(len(cleanup), (len(cleanup)*unisize/1024))
 
@@ -143,7 +143,7 @@ def _cleanup(interval, unisize=128):
             logger.debug('Removing file {0}'.format(i))
             os.remove(i)
             logger.debug('Removed file: {0}'.format(i))
-        logger.info('Files deleted: {0}'.format(len(files)))
+        logger.info('Files Deleted: {0}'.format(len(files)))
         logger.info('Space Reclamed: {0}GB'.format(len(files)*unisize/1024))
         sys.exit(0)
     else:
