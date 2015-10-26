@@ -170,11 +170,12 @@ def main():
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
-    if not args.day_interval:
-        interval = 30
-        logger.debug('interval: {0}'.format(interval))
-    elif args.day_interval:
+    if args.day_interval:
         interval = args.day_interval
+        logger.debug('Day interval: {0}'.format(str(args.day_interval)))
+    else:
+        interval = 30
+        logger.debug('Default interval, {0}, used'.format(str(interval)))
     if not args.eval and not args.purge:
         logger.error('Please supply --eval or --purge')
         sys.exit(1)
